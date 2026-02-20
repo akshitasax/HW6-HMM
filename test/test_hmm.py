@@ -38,7 +38,8 @@ def test_mini_weather():
     viterbi_path = mini_hmm_obj.viterbi(test_obs_seq)
     # Check if output is correct length and valid state indices
     assert len(viterbi_path) == len(test_obs_seq)
-    assert all(0 <= state < len(hidden_states) for state in viterbi_path)
+    # viterbi_path contains hidden state labels, so check membership in hidden_states
+    assert all(state in hidden_states for state in viterbi_path)
 
     # ground-truth path is provided, compare against that
     if viterbi_expected is not None:
@@ -66,8 +67,8 @@ def test_mini_weather():
 def test_full_weather():
 
     # Load the HMM parameters and expected outputs for the full weather problem
-    weather_hmm = np.load("full_weather_hmm.npz", allow_pickle=True)
-    weather_io = np.load("full_weather_input_output.npz", allow_pickle=True)
+    weather_hmm = np.load("./data/full_weather_hmm.npz", allow_pickle=True)
+    weather_io = np.load("./data/full_weather_sequences.npz", allow_pickle=True)
 
     # Unpack the HMM parameters
     observation_states = weather_hmm['observation_states']
@@ -95,9 +96,9 @@ def test_full_weather():
 
     # Test Viterbi algorithm
     viterbi_path = hmm_obj.viterbi(test_obs_seq)
-    # Check that output is numpy array (if relevant), right length, and only valid states
+    # Check that output is right length, and only valid states
     assert len(viterbi_path) == len(test_obs_seq)
-    assert all(0 <= state < len(hidden_states) for state in viterbi_path)
+    assert all(state in hidden_states for state in viterbi_path)
     # Check that it matches provided "best" path
     if viterbi_expected is not None:
         assert np.array_equal(viterbi_path, viterbi_expected)
