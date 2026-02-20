@@ -62,6 +62,13 @@ Finally, please update your README with a brief description of your methods.
   [ ] github actions (install + pytest) (optional)
 
 
+Added description:
+
+Forward algorithm: For each observation in the input sequence, I first initialize the probabilities using the prior probability of each hidden state multiplied by the probability of emitting the first observation from that state. For each subsequent observation, I update the probability for each state based on the total probability of transitioning from all previous states and emitting the current observation. The overall forward probability is computed by summing over all final probabilities for the sequence.
+
+Viterbi algorithm: At each time step, I compute the highest probability path to each hidden state given the observations so far. This is done by keeping a dynamic programming table of the max probabilities and backtracking pointers for state transitions. After filling the table, I find the most likely final state and trace back through the highest likelihood path to recover the full sequence of most likely hidden states.
+
+
 ## Completing the Assignment 
 Push your code to GitHub with passing unit tests, and submit a link to your repository [here](https://forms.gle/xw98ZVQjaJvZaAzSA)
 
